@@ -1,104 +1,65 @@
+<!-- <?php print_r($_SERVER) ?> -->
 <?php 
-if(isset($_GET['email'])){
-	$name =$_GET["userName"];
-	$from =$_GET["userEmail"];
-	$phone =$_GET["userPhoneNumber"];
-	$sub=$_GET["sub"];
-	$message=$_GET["userMessage"];
-	$receiver ="nandakishroe695@gmail.com";
-	$subject="Profound Infra Enquiry Form Details";
-	$headers = "MIME-Version: 1.0" . "\r\n";
-	$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-	$headers = `From: $from`;
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    if (isset($_POST["userName"])) {
+        $name_Name = $_POST["userName"];
+	    $from =$_POST["userEmail"];
+	    $user_Phone =$_POST["userPhoneNumber"];
+	    $user_Message=$_POST["userMessage"];
+	    $subject="Profound Infra Enquiry Form Details";
+        $receiver="nandakishore695@gmail.com";
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        $headers = `From: $from`;
+        echo $message ="
+        <html>
+        <head>
+            <title>HTML email</title>
+        </head>
+        <body>
+            <table width='50%' border='0' align='center' cellpadding='0' cellspacing='0'>
+                <tr>
+                    <td colspan='2' align='center' valign='top'><img style=' margin-top: 15px; ' src='https://profoundinfra.com/wp-content/themes/profoundinfra/assets/img/Profound-Infra-Logo-01-Email.png' width:'200' ></td>
+                </tr>
+                <tr>
+                    <td width='50%' align='right'>&nbsp;</td>
+                    <td align='left'>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align='right' valign='top' style='border-top:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 5px 7px 0;'> Subject: </td>
+                    <td align='left' valign='top' style='border-top:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 0 7px 5px;'>".$subject."</td>
+                </tr>
+                <tr>
+                    <td align='right' valign='top' style='border-top:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 5px 7px 0;'>Full Name :</td>
+                    <td align='left' valign='top' style='border-top:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 0 7px 5px;'>".$name_Name."</td>
+                </tr>
+                <tr>
+                    <td align='right' valign='top' style='border-top:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 5px 7px 0;'>Email Address :</td>
+                    <td align='left' valign='top' style='border-top:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 0 7px 5px;'>".$user_Message."</td>
+                </tr>
+                <tr>
+                    <td align='right' valign='top' style='border-top:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 5px 7px 0;'>Phone Number:</td>
+                    <td align='left' valign='top' style='border-top:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 0 7px 5px;'>".$user_Phone."</td>
+                </tr>
+                <tr>
+                    <td align='right' valign='top' style='border-top:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 5px 7px 0;'>Message :</td>
+                    <td align='left' valign='top' style='border-top:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 0 7px 5px;'>".$user_Message."</td>
+                </tr>
+                <tr>
+                    <td align='right' valign='top' style='border-top:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 5px 7px 0;'></td>
+                    <td align='left' valign='top' style='border-top:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 0 7px 5px;'></td>
+                </tr>
+            </table>
+        </body>
+        </html> 
+    ";
+    }
+    if(mail($receiver,$subject,$message,$headers)){
+        //Success Message
+        echo "<script type='text/javascript'>  window.location='http://localhost/wordpress/thank-you/'; </script>";
+    }else{
+        //Fail Message
+        echo "The message could not been sent!";
+    }
 }
-
-if(mail($receiver,$subject,$message,$headers)){
-    //Success Message
-    echo "<script type='text/javascript'>  window.location='http://localhost/wordpress/thank-you/'; </script>";
-}else{
-    //Fail Message
-    echo "The message could not been sent!";
-}
-
 ?>
-
-<?php
-   if ( post_password_required() ){
-      return;
-   }
-?>
-<div id="comments">
-    <?php if ( have_comments() ) { ?>
-    <h2 class="comments-title">
-        <?php
-                printf( _nx( 'One thought on &ldquo;%2$s&rdquo;', '%1$s thoughts on &ldquo;%2$s&rdquo;', get_comments_number(), 'comments title', 'codesk' ),
-                    number_format_i18n( get_comments_number() ), get_the_title() );
-            ?>
-    </h2>
-    <div class="gav-comment-list clearfix">
-        <ol class="pingbacklist">
-            <?php
-                wp_list_comments( array( 'type' => 'pingback', 'short_ping'  => true ) );
-            ?>
-        </ol>
-        <ol class="comment-list">
-            <?php wp_list_comments('type=comment&callback=codesk_comment_template'); ?>
-        </ol>
-        <?php
-          if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) :
-          ?>
-        <footer class="navigation comment-navigation" role="navigation">
-            <div class="previous"><?php previous_comments_link( esc_html__( '&larr; Older Comments', 'codesk') ); ?>
-            </div>
-            <div class="next right"><?php next_comments_link( esc_html__( 'Newer Comments &rarr;', 'codesk') ); ?></div>
-        </footer>
-        <?php endif; ?>
-        <?php if ( ! comments_open() && get_comments_number() ) : ?>
-        <p class="no-comments"><?php echo esc_html__( 'Comments are closed.' , 'codesk'); ?></p>
-        <?php endif; ?>
-    </div>
-    <?php } ?>
-    <?php
-        $aria_req = ( $req ? " aria-required='true'" : '' );
-        $comment_field = '
-          <div class="form-group">
-            <textarea placeholder="' . esc_attr__('Write Your Comment *', 'codesk') . '" rows="8" id="comment" class="form-control"  name="comment"'.$aria_req.'></textarea>
-          </div>
-        ';
-        if(class_exists('Codesk_Themer_Comment')){
-          $comment_field = Codesk_Themer_Comment::getInstance()->comment_field($aria_req) . $comment_field;
-        }
-        $comment_args = array(
-          'title_reply'=> ('<div class="title">'.esc_html__('Add a Comment ','codesk').'</div>'),
-          'comment_field' => $comment_field,
-          'fields' => apply_filters(
-            'comment_form_default_fields',
-            array(
-              'author' => '
-			  <div class="row">
-			  	<div class="form-group col-sm-6 col-xs-12">
-                	<input type="text" name="author" placeholder="'.esc_attr__('Your Name *', 'codesk').'" class="form-control" id="author" value="' . esc_attr( $commenter['comment_author'] ) . '" ' . $aria_req . ' />
-                </div>',
-              'email' => ' 
-			  	<div class="form-group col-sm-6 col-xs-12">
-                	<input id="email" name="email" placeholder="'.esc_attr__('Email *', 'codesk').'" class="form-control" type="text" value="' . esc_attr(  $commenter['comment_author_email'] ) . '" ' . $aria_req . ' />
-                </div>',
-				'url' => '<div class="form-group col-sm-6 col-xs-12">
-                <input id="url" placeholder="'.esc_attr__('Website', 'codesk').'" name="url" class="form-control" type="text" value="' . esc_attr( $commenter['comment_author_url'] ) . '"  />
-                </div>
-				</div>',          
-            )),
-            'label_submit' => 'Post Comment',
-            'comment_notes_before' => '<div class="form-group h-info">'.esc_html__('Your email address will not be published.','codesk').'</div>',
-            'comment_notes_after' => '',
-        );
-    ?>
-    <?php global $post; ?>
-    <?php if('open' == $post->comment_status){ ?>
-    <div class="commentform reset-button-default">
-        <div class="commentform-inner">
-            <?php codesk_comment_form($comment_args); ?>
-        </div>
-    </div><!-- end commentform -->
-    <?php } ?>
-</div><!-- end comments -->
